@@ -3,34 +3,48 @@
     <cu-custom bgColor="bg-lightGrey" isBack="{{false}}" isCustom="{{true}}" isNav="{{false}}">
         <view slot="backText">返回</view>
         <view slot="content" class="text-shadow-meows">
-            <!-- <text class="text-white text-bold">{{postId}}</text> -->
-            <!-- <text class="text-white text-bold">如何写出无法维护的代码</text> -->
+            <!-- <text class="text-white text-bold">{{postId}}</text>-->
+            <!-- <text class="text-white text-bold">如何写出无法维护的代码</text>  -->
         </view>
     </cu-custom>
-
-    
-    
-     
-    <view class="flex-sub text-center margin-sm">
+    <!--缩略图-->
+    <view class="head-view">
+      <image style="width:100%;height:450rpx" src="{{postThumbnail}}"></image>
+    </view>
+    <!--标题-->
+    <view class="flex-sub margin-sm">
       <view class="text-xl">
-        <text class="text-black text-bold">{{postTitle}}</text>
+        <text class="text-bold" style="color:#1c2438">{{postTitle}}</text>
       </view>
     </view>
-
-    
     <!-- <view class="bg-white flex-sub radius shadow-lg">
         <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
     </view> -->
     
-    
+    <!--标签-->
     <view class="margin-lr-sm flex flex-wrap">
         <view class="padding-xs bg-white">
             <!-- <view class="cu-tag radius sm">Java</view> -->
             <view class="cu-tag radius" wx:for="{{postTags}}" wx:key="key" wx:for-item="postTags" wx:for-index="index">{{postTags.name}}</view>
         </view>
     </view>
-
-    <view class="cf">
+    <!--阅读、点赞、创建时间-->
+    <view class="data-view">
+      <view class="data-view-left">
+        <view class="data-item">
+          <van-icon name="fire" color="#495060" size="15px"/>
+          <view style="font-size:24rpx;margin-left:10rpx" class="text-bold">{{postVisits}}</view>
+        </view>
+        <view class="data-item" style="margin-left:25rpx">
+          <van-icon name="like" color="#495060" size="15px"/>
+          <view style="font-size:24rpx;margin-left:10rpx" class="text-bold">{{postLikes}}</view>
+        </view>
+      </view>
+        <view class="data-item">
+          <view style="font-size:24rpx;color:#495060" class="text-bold">{{postDate}}</view>
+        </view>
+    </view>
+    <!-- <view class="cf">
         <view class="margin-sm fr">
             <view class="cu-capsule round">
                 <view class="cu-tag bg-red sm">
@@ -58,9 +72,9 @@
             </view>
             <text class="cu-capsule" decode="{{true}}">&nbsp;</text>
         </view>
-    </view>
+    </view> -->
 
-    <view class="margin-sm">
+    <view class="margin-sm" style="background:#f8f8f9;padding-top:15rpx;padding-bottom:15rpx">
         <htmltowxml text="{{postContent}}" type="md" highlightStyle="{{style}}" linenums="{{false}}" showLoading="{{false}}" bindWxmlTagATap="wxmlTagATap" imghost=""></htmltowxml>
     </view>
     
@@ -70,8 +84,8 @@
 
     <view class="cu-bar bg-white align-center">
         <view class="action border-title">
-            <text class="text-xxl text-bold text-blue">评论</text>
-            <text class="bg-gradual-blue"></text>
+            <text class="text-xxl text-bold" style="color:#495060">评论</text>
+            <text class="bg-gradual-blue" style="background:#495060"></text>
         </view>
     </view>
 
@@ -82,7 +96,7 @@
         </view> -->
         <view class="flex justify-center" style="width:100%" wx:if="{{!hasUserInfo && canIUse}}"> 
             <view>
-                <button class="cu-btn bg-blue shadow-blur round"role="button"aria-disabled="false" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权后可评论</button>
+                <button class="cu-btn shadow-blur round" role="button" aria-disabled="false" open-type="getUserInfo" bindgetuserinfo="getUserInfo" style="color:#495060">授权后可评论</button>
             </view>
         </view>
         <block wx:else>
@@ -90,7 +104,7 @@
             <view class="action">
                 <text class="{{false?'cuIcon-likefill text-red':'cuIcon-like text-grey'}}" bindtap="Likes"></text>
             </view>
-            <button class="cu-btn bg-lightBlue shadow-blur" bindtap="CommentSubmit" hidden="{{CommentShow}}">发送</button>
+            <button class="cu-btn shadow-blur" bindtap="CommentSubmit" hidden="{{CommentShow}}" style="background:#495060;color:#fff">发送</button>
             <button class="cu-btn bg-grey shadow-blur" bindtap="CommentSubmitTips" hidden="{{!CommentShow}}">{{LastTime}}S</button>
         </block>
     </view>

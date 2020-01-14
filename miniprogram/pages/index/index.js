@@ -166,7 +166,7 @@ Page({
         })
     },
     onLoad: function () {
-      console.log("onLoad")
+      // console.log("onLoad")
         // 在页面中定义插屏广告
         // let interstitialAd = null
 
@@ -193,7 +193,7 @@ Page({
         var token = app.globalData.token;
         var params = {
             page: 0,
-            size: 15,
+            size: 20,
             sort: 'createTime,desc',
         };
       var urlCategoryList = app.globalData.url + '/api/content/categories';
@@ -366,7 +366,7 @@ Page({
           console.warn(e.currentTarget.dataset.id);
           var params = {
             page: e.currentTarget.dataset.id,
-            size: 15,
+            size: 20,
             sort: 'createTime,desc',
           };
           //@todo 文章内容网络请求API数据
@@ -378,7 +378,7 @@ Page({
           var token = app.globalData.token;
           var params = {
             page: e.currentTarget.dataset.id,
-            size: 15,
+            size: 20,
             sort: 'createTime,desc',
           };
           request.requestGetApi(urlPostList, token, params, this, this.successTreeView, this.failTreeView);
@@ -631,7 +631,7 @@ Page({
         var token = app.globalData.token;
         var params = {
           page: 0,
-          size: 15,
+          size: 20,
           sort: 'createTime,desc',
         };
         request.requestGetApi(urlPostList, token, params, this, this.successPostList, this.failPostList);
@@ -645,7 +645,7 @@ Page({
         var token = app.globalData.token;
         var params = {
           page: 0,
-          size: 15,
+          size: 20,
           sort: 'createTime,desc',
         };
         request.requestGetApi(urlPostList, token, params, this, this.successTreeView, this.failTreeView);

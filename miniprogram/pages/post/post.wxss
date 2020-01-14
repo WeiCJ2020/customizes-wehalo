@@ -102,3 +102,20 @@ page {
 .ad {
     margin: 20rpx;
 }
+.data-view{
+  width: 100%;
+  padding:15rpx 25rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.data-view-left{
+  display: flex;
+  flex-direction: row;
+}
+.data-item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+}

@@ -192,7 +192,7 @@ Page({
     successFunPost: function (res, selfObj) {
         var that = this;
 
-        // console.warn(res.data);
+        console.log(res.data);
         var createTime = res.data.createTime;
         // time.customFormatTime(createTime, 'Y-M-D h:m:s');
         // 当前时间的日期格式

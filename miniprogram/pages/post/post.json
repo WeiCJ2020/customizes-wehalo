@@ -1,5 +1,6 @@
 {
     "usingComponents": {
-        "htmltowxml": "plugin://htmltowxml/view"
+        "htmltowxml": "plugin://htmltowxml/view",
+        "van-icon": "../../dist/icon/index"
     }
 }

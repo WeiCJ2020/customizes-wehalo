@@ -1,6 +1,8 @@
 // miniprogram/pages/wehalo/wehalo.js
 //获取应用实例
-const app = getApp()
+const app = getApp();
+const request = require('../../utils/request.js');
+let time = require('../../utils/util.js');
 Page({
 
     /**
@@ -12,6 +14,7 @@ Page({
         Custom: app.globalData.Custom,
         skin: app.globalData.skin,
         loading: true,
+        
     },
 
     /**
@@ -31,9 +34,34 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
-
+      var urlJournalsList = app.globalData.url + '/api/content/journals';
+      var token = app.globalData.token;
+      var jparams = {
+        page: 0,
+        size: 20,
+        sort: 'createTime,desc',
+      };
+      // @todo 日志网络请求API数据
+      request.requestGetApi(urlJournalsList, token, jparams, this, this.successJournalList, this.failJournalList);
     },
-
+  successJournalList: function (res, selfObj) {
+    console.log(res);
+    var array = res.data.content ;
+    console.log(array);
+    for(var i = 0;i < array.length;i++){
+      console.log("array");
+      var createTime = time.customFormatTime(array[i].createTime, 'Y-M-D');
+      console.log(createTime);
+      array[i].createTime = createTime;
+    }
+    this.setData({
+      journalList: array
+    })
+  },
+  failJournalList: function (res, selfObj) {
+    console.log(res);
+  },
+ 
     /**
      * 生命周期函数--监听页面隐藏
      */

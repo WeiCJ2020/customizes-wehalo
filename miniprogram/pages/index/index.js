@@ -186,9 +186,8 @@ Page({
         //         console.error(err)
         //     })
         // }
-
+    
        
-
         var urlPostList = app.globalData.url + '/api/content/posts';
         var token = app.globalData.token;
         var params = {
@@ -211,7 +210,7 @@ Page({
         request.requestGetApi(urlPostList, token, paramBanner, this, this.successBanner, this.failBanner);
         // @todo 所有分类网络请求API数据
         request.requestGetApi(urlCategoryList, token, paramCategory, this, this.successCategoryList, this.failCategoryList);
-
+      
         
         var urlAdminLogin = app.globalData.url + '/api/admin/login';
         var paramAdminLogin = {
@@ -672,6 +671,7 @@ Page({
   failTreeView: function (res, selfObj){
       console.log(res);
     },
+
     /**
     * 用户点击右上角分享
     */

@@ -10,7 +10,7 @@
     <!--缩略图-->
     <view class="head-view">
       <image style="width:100%;height:450rpx" src="{{postThumbnail}}"></image>
-    </view>
+    </view> 
     <!--标题-->
     <view class="flex-sub margin-sm">
       <view class="text-xl">
@@ -102,7 +102,7 @@
         <block wx:else>
             <input bindinput="Comment" style="margin-left: 40rpx;" class="solid-bottom" type="text" focus="{{false}}" maxlength="300" cursor-spacing="10" placeholder="尽管吐槽吧....." value="{{valuekey}}"></input>
             <view class="action">
-                <text class="{{false?'cuIcon-likefill text-red':'cuIcon-like text-grey'}}" bindtap="Likes"></text>
+                <text class="{{isLike?'cuIcon-likefill text-red':'cuIcon-like text-grey'}}" bindtap="Likes"></text>
             </view>
             <button class="cu-btn shadow-blur" bindtap="CommentSubmit" hidden="{{CommentShow}}" style="background:#495060;color:#fff">发送</button>
             <button class="cu-btn bg-grey shadow-blur" bindtap="CommentSubmitTips" hidden="{{!CommentShow}}">{{LastTime}}S</button>

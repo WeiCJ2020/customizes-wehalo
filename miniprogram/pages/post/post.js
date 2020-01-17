@@ -3,7 +3,8 @@ const app = getApp();
 const Bmob = require('../../utils/Bmob-2.2.2.min.js') ;
 const request = require('../../utils/request.js');
 let time = require('../../utils/util.js');
-var countdown = 60;
+var countdown = 60; 
+const db = wx.cloud.database()
 
 Page({
 
@@ -22,6 +23,7 @@ Page({
         ButtonTimer: '',//  按钮定时器
         LastTime: 60,
         CommentSwitch: true,
+        isLike:false,
     },
 
     // getUserInfo: function (e) {
@@ -102,7 +104,8 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
-
+ 
+      // console.log(isLike);
         // console.warn(app.globalData.userInfo);
       console.log(app.globalData.userInfo)
         if (app.globalData.userInfo) {
@@ -198,17 +201,22 @@ Page({
         // 当前时间的日期格式
         // var date = new Date();
         // console.log(time.formatTime(date+"123"));
-
+        var article_id = res.data.id ;
+        this.searchAllLike(article_id);
+        this.searchUserLike(article_id);
         that.setData({
             postTitle: res.data.title,
             postVisits: res.data.visits,
-            postLikes: res.data.likes,
+            // postLikes: res.data.likes,
             postContent: res.data.originalContent,
             postDate: time.customFormatTime(createTime, 'Y-M-D'),
             postTags: res.data.tags,
             postThumbnail: res.data.thumbnail,
+            article_id:res.data.id
         })
         // console.warn(postTags);
+   
+     
 
     },
     /**
@@ -218,7 +226,7 @@ Page({
         console.error('failFunPosts', res)
     },
 
-
+// { "authData": { "weapp": { "openid": "o7Vka4y6Kv6yLrULn_uKuuYGGvMo", "session_key": "EkgA5DkWJ+DnWrbInSO3NQ==" } }, "createdAt": "2020-01-13 20:40:37", "nickName": "可乐不能喝", "objectId": "2b0296f672", "openid": "o7Vka4y6Kv6yLrULn_uKuuYGGvMo", "sessionToken": "94a629c3409f1f1a8006cb52c981ba8f", "updatedAt": "2020-01-15 20:39:21", "userPic": "https://wx.qlogo.cn/mmopen/vi_32/3hE5bd8Np4cp0Cavzia4ibcWgiaibspKyyfczuW5LG2Wng47mem4NxgurVV20crrqZLMNthd18cwGA5Fc6NiauXe6pw/132", "username": "e54f2dfca5537784" }
     /**
      * 评论列表请求--接口调用成功处理
      */
@@ -308,8 +316,9 @@ Page({
 
                     author: app.globalData.userInfo.nickName,
                     authorUrl: app.globalData.userInfo.avatarUrl,
+                  // authorUrl: 'https://wx.qlogo.cn/mmopen/vi_32/3hE5bd8Np4cp0Cavzia4ibcWgiaibspKyyfczuW5LG2Wng47mem4NxgurVV20crrqZLMNthd18cwGA5Fc6NiauXe6pw/132',
                     content: that.data.CommentContent,
-                    email: "aquanlerou@eunji.cn",
+                    email: "aquanlrou@eunji.cn",
                     parentId: 0,
                     postId: that.data.postId,
                 };
@@ -343,11 +352,20 @@ Page({
     },
 
     Likes: function() {
-        wx.showToast({
-            title: "文章点赞功能开发中...",
+      var isLike = this.data.isLike;
+      console.log(isLike);
+      if(!isLike){
+        var article_id = this.data.article_id;
+        var open_id = wx.getStorageSync('openid')
+        this.addLike(open_id, article_id);
+      }else{
+            wx.showToast({
+            title: "您已经喜欢该文章拉...",
             icon: 'none',
             duration: 2000
         })
+      }
+   
     },
 
 
@@ -389,5 +407,72 @@ Page({
         console.error('failSwitch', res)
     },
 
-
+    addLike:function(open_id,article_id){
+      // var isLike = this.data.isLike ;
+      var _this = this ;
+      db.collection('like').add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          open_id: open_id,
+          article_id: article_id
+        },
+      })
+        .then(res => {
+          console.log(res)
+          wx.showToast({
+            title: '棒棒哒！',
+            icon: 'none',
+            duration: 2000
+          })
+          _this.setData({
+            isLike:true
+          })
+        })
+        .catch(console.error);
+    },
+  searchUserLike: function (article_id){
+      var _this = this;
+      var open_id = wx.getStorageSync('openid');
+      // var article_id = this.data.article_id ;
+      //客户端
+      db.collection('like').where({
+        _openid: open_id ,
+        article_id: article_id
+      })
+        .get().then((res) => {
+          // res.data 是包含以上定义的两条记录的数组
+          console.log('searchUserLike');
+          console.log(res);
+          console.log(res.data.length);
+          if(res.data.length == 0){
+            console.log('res.data.length == 0')
+            _this.setData({
+              isLike:false
+            })
+          }else{
+            console.log('res.data.length != 0')
+            _this.setData({
+              isLike: true
+            })
+          }
+        });
+    },
+  searchAllLike: function (article_id) {
+    // var open_id = wx.getStorageSync('openid');
+    var _this = this ;
+    // var article_id = this.data.article_id;
+    //客户端
+    db.collection('like').where({
+      // _openid: open_id,
+      article_id: article_id
+    })
+      .get().then((res) => {
+        // res.data 是包含以上定义的两条记录的数组
+        // console.log('searchAllLike');
+        // console.log(res);
+        _this.setData({
+          postLikes:res.data.length
+        })
+      });
+  },
 })

@@ -1,6 +1,6 @@
 /**
  * @desc    API请求接口类封装
- * @author  Aquan
+ * @author  Roy
  * @date    2019年7月29日17:38:06
  */
 const app = getApp();
@@ -43,7 +43,7 @@ function requestGetApi(url, token, params, sourceObj, successFun, failFun, compl
  * @param  {Function} failFun     接口调用失败的回调函数
  * @param  {Function} completeFun 接口调用结束的回调函数(调用成功、失败都会执行)
  */
-function requestApi(url, token, params, method, sourceObj, successFun, failFun, completeFun) {
+function requestApi(url, token,params, method, sourceObj, successFun, failFun, completeFun) {
     // console.log(token);
     if (method == 'POST') {
         // var contentType = 'application/x-www-form-urlencoded'

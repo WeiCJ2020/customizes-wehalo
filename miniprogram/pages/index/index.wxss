@@ -200,10 +200,10 @@ image[class*="gif-"] {
     display: flex;
     flex-direction: column;
 }
-.category{
+.category{ 
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 5rpx;
   padding-left: 30rpx;
   padding-right: 30rpx;

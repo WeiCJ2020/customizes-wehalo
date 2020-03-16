@@ -104,6 +104,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
+      var article_id = this.article_id ;
  
       // console.log(isLike);
         // console.warn(app.globalData.userInfo);
@@ -313,7 +314,7 @@ Page({
                 var urlPostList = app.globalData.url + '/api/content/posts/comments';
                 var token = app.globalData.token;
                 var params = {
-
+                    
                     author: app.globalData.userInfo.nickName,
                     authorUrl: app.globalData.userInfo.avatarUrl,
                   // authorUrl: 'https://wx.qlogo.cn/mmopen/vi_32/3hE5bd8Np4cp0Cavzia4ibcWgiaibspKyyfczuW5LG2Wng47mem4NxgurVV20crrqZLMNthd18cwGA5Fc6NiauXe6pw/132',
@@ -475,4 +476,5 @@ Page({
         })
       });
   },
+  
 })

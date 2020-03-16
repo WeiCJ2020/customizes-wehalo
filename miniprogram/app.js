@@ -101,13 +101,13 @@ App({
         userInfo: null,
         skin: null,
         roleFlag: false,
-        url: "https://blog.lingyikz.cn",//http://localhost:8090
-        BlogName: "13号档案馆",
-        token: "320393744",
+        url: "这里是你的域名",//http://localhost:8090
+        BlogName: "这里是你的博客名字",
+        token: "这里是你博客后台设置的token",
         highlightStyle: "dracula", //代码高亮样式，可用值default,darcula,dracula,tomorrow
-        adminOpenid: "o7Vka4y6Kv6yLrULn_uKuuYGGvMo",
-        HaloUser: "roy",
-        HaloPassword: "520weige"
+        adminOpenid: "这里是你的adminOpenid",
+        HaloUser: "这里是你的halo账号",
+        HaloPassword: "这里是你的halo账号的密码"
     }
     
 })

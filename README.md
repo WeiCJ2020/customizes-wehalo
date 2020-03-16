@@ -1,3 +1,7 @@
+![IMG_2041.JPG](http://image.lingyikz.cn/image/IMG_2041_1584337480082.JPG)
+![IMG_2039.JPG](http://image.lingyikz.cn/image/IMG_2039_1584337495132.JPG)
+![IMG_2040.JPG](http://image.lingyikz.cn/image/IMG_2040_1584337508951.JPG)
+![IMG_2043.JPG](http://image.lingyikz.cn/image/IMG_2043_1584337532445.JPG)
 **该项目是本人与阿全@aquanlerou经过一番PY交易后已经得到了授权，重新立项**
 
 **该项目是本人与阿全@aquanlerou经过一番PY交易后已经得到了授权，重新立项**

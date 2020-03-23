@@ -209,3 +209,59 @@ image[class*="gif-"] {
   padding-right: 30rpx;
   flex-wrap: wrap;
 }
+/**
+=================================================================================
+*/
+.top-view{
+  display: flex;
+  flex-direction: row;
+}
+.swiper{
+  width: 100%;
+  height: 340rpx;
+  position: absolute;
+  top: 70px;
+
+}
+.swiper-img{
+  height: 495rpx;
+  width: 100%;
+}
+.catogry-view{
+    display: flex;
+    flex-direction: row;
+    padding: 25rpx 20rpx;
+    align-items: center;
+    background: #f8f8f9;
+}
+.select-view{
+  display: flex;
+  flex-direction: column;
+  margin-right: 20rpx;
+  font-size: 35rpx;
+  font-weight: bold;
+  color: #495060
+}
+.unselect-view{
+  display: flex;
+  flex-direction: column;
+  margin-right: 20rpx;
+  font-size: 26rpx;
+  color: #495060
+}
+.article-view{
+  background: #f8f8f9;
+}
+.banner-title{
+  position: absolute;
+  top: 120rpx;
+  left: 40rpx;
+  color: #fff;
+
+}
+.banner-time{
+  position: absolute;
+  bottom: 40rpx;
+  right: 40rpx;
+  color: #fff;
+}

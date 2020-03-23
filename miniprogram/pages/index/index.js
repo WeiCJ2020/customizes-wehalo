@@ -37,6 +37,9 @@ Page({
         cateCur:0,
         switchValue:true,
         adminOpenid: app.globalData.adminOpenid,
+        currentIndex:'',
+        postList:[],
+        isLoading:false,
         colourList: [{
             colour: 'bg-red'
         }, {
@@ -192,7 +195,7 @@ Page({
         var token = app.globalData.token;
         var params = {
             page: 0,
-            size: 20,
+            size: 5,
             sort: 'createTime,desc',
         };
       var urlCategoryList = app.globalData.url + '/api/content/categories';
@@ -365,7 +368,7 @@ Page({
           console.warn(e.currentTarget.dataset.id);
           var params = {
             page: e.currentTarget.dataset.id,
-            size: 20,
+            size: 5,
             sort: 'createTime,desc',
           };
           //@todo 文章内容网络请求API数据
@@ -377,7 +380,7 @@ Page({
           var token = app.globalData.token;
           var params = {
             page: e.currentTarget.dataset.id,
-            size: 20,
+            size: 5,
             sort: 'createTime,desc',
           };
           request.requestGetApi(urlPostList, token, params, this, this.successTreeView, this.failTreeView);
@@ -460,7 +463,66 @@ Page({
      * 加载更多
      */
     loadMore: function () {
-
+      console.log("加载更多");
+      var isLoading = this.data.isLoading;
+      if (!isLoading){
+        var slugName = this.data.slugName;
+        var pages = this.data.pages;
+        var page = this.data.page;
+        page++;
+        if(page <= pages){
+          this.setData({
+            page: page
+          })
+          if (slugName === 'shouye') {
+            //如果是回到首页，则查询首页数据
+            this.setData({
+              isHome: true,
+              // isLoading: true
+            })
+            wx.showLoading({
+              title: '正在加载',
+            })
+            var urlPostList = app.globalData.url + '/api/content/posts';
+            var token = app.globalData.token;
+            var params = {
+              page: page,
+              size: 5,
+              sort: 'createTime,desc',
+            };
+            request.requestGetApi(urlPostList, token, params, this, this.successPostList, this.failPostList);
+          } else {
+            //不是回到首页，则根据分类查询数据
+            console.log("slugName:" + slugName);
+            this.setData({
+              isHome: false,
+              // isLoading: true
+            })
+            wx.showLoading({
+              title: '正在加载',
+            })
+            var urlPostList = app.globalData.url + '/api/content/categories/' + slugName + '/posts';
+            var token = app.globalData.token;
+            var params = {
+              page: page,
+              size: 5,
+              sort: 'createTime,desc',
+            };
+            request.requestGetApi(urlPostList, token, params, this, this.successTreeView, this.failTreeView);
+          }
+        }else{
+          wx.showToast({
+            icon: 'none',
+            title: '已经没有拉！',
+          })
+        }
+        // pages++ ;
+        // this.setData({
+        //   pages: pages
+        // })
+       
+      }
+     
     },
 
 
@@ -489,6 +551,8 @@ Page({
      */
     successPostList: function (res, selfObj) {
         var that = this;
+        var currentList = this.data.postList ;
+        // var pages = this.data.pages;
 
         // console.warn(res.data.content);
         var list = res.data.content;
@@ -496,18 +560,31 @@ Page({
             list[i].createTime = util.customFormatTime(list[i].createTime, 'Y.M.D');
         }
         if (res.data.content != "") {
+          console.log("有数据了")
+          var postList = currentList.concat(res.data.content);
+          var pages = that.data.pages ;
             that.setData({
-                postList: res.data.content,
+                postList: postList,
                 moreFlag: false,
-                pages: res.data.pages,
+              pages: res.data.pages,
+                page:res.data.page
             });
         } else {
             that.setData({
-                postList: res.data.content,
+                postList: currentList,
                 moreFlag: true,
                 pages: res.data.pages,
+                page:res.data.page
             });
+            wx.showToast({
+              icon:'none',
+              title: '已经没有拉！',
+            })
         }
+        wx.hideLoading();
+        that.setData({
+          isLoading:false
+        })
 
         // console.warn(list)
         // var time = setInterval(function () {
@@ -553,6 +630,9 @@ Page({
        this.setData({
          categoriesList: categoriesList
        })
+       this.setData({
+         slugName:'shouye'
+       })
     console.log(res) ;
     },
     failCategoryList: function (res, selfObj) {
@@ -581,92 +661,123 @@ Page({
         var urlPostList = app.globalData.url + '/api/content/posts/search?sort=createTime%2Cdesc&keyword=' + this.data.SearchContent;
         var token = app.globalData.token;
         var params = {};
-
-
         //@todo 搜索文章网络请求API数据
         request.requestPostApi(urlPostList, token, params, this, this.successSearch, this.failSearch);
     },
     successSearch: function (res, selfObj) {
         var that = this;
         // console.warn(res.data.content);
+        // var postList = this.data.postList;
+        // postList.length = 0 ;
+        // that.setData({
+        //   postList:postList
+        // })
         var list = res.data.content;
         for (let i = 0; i < list.length; ++i) {
             list[i].createTime = util.customFormatTime(list[i].createTime, 'Y.M.D');
         }
+   
         if (res.data.content != "") {
             that.setData({
-                postList: res.data.content,
+              postList: res.data.content,
                 moreFlag: false,
                 pages: res.data.pages,
+                page:res.data.page
             });
         } else {
             that.setData({
-                postList: res.data.content,
+              postList: res.data.content,
                 moreFlag: true,
                 pages: res.data.pages,
+              page: res.data.page
             });
         }
     },
     failSearch: function (res, selfObj) {
         console.error('failSearch', res)
     },
+    /**
+     * 切换分类
+     */
     getCategoryInfo:function(e){
       console.log(e);
-     
-      this.setData({
-        TabCur:0,
-        cateCur: e.currentTarget.dataset.id,
-      })
-      var slugName = e.currentTarget.dataset.slugname ;
-      this.setData({
-        slugName: slugName
-      })
-      if (slugName === 'shouye'){
-        //如果是回到首页，则查询首页数据
+      var postList = this.data.postList;
+      var page = this.data.page ;
+      postList.length = 0;
         this.setData({
-          isHome: true
+          TabCur: 0,
+          cateCur: e.currentTarget.dataset.id,
+          postList: postList,
+          page: page,
+
         })
-        var urlPostList = app.globalData.url + '/api/content/posts';
-        var token = app.globalData.token;
-        var params = {
-          page: 0,
-          size: 20,
-          sort: 'createTime,desc',
-        };
-        request.requestGetApi(urlPostList, token, params, this, this.successPostList, this.failPostList);
-      }else{
-        //不是回到首页，则根据分类查询数据
-        console.log("slugName:" + slugName);
+        var slugName = e.currentTarget.dataset.slugname;
         this.setData({
-          isHome: false
+          slugName: slugName
         })
-        var urlPostList = app.globalData.url + '/api/content/categories/' + slugName + '/posts';
-        var token = app.globalData.token;
-        var params = {
-          page: 0,
-          size: 20,
-          sort: 'createTime,desc',
-        };
-        request.requestGetApi(urlPostList, token, params, this, this.successTreeView, this.failTreeView);
-      }
+        if (slugName === 'shouye') {
+          //如果是回到首页，则查询首页数据
+          this.setData({
+            isHome: true
+          })
+          var urlPostList = app.globalData.url + '/api/content/posts';
+          var token = app.globalData.token;
+          var params = {
+            page: 0,
+            size: 5,
+            sort: 'createTime,desc',
+          };
+          request.requestGetApi(urlPostList, token, params, this, this.successPostList, this.failPostList);
+        } else {
+          //不是回到首页，则根据分类查询数据
+          console.log("slugName:" + slugName);
+        
+          this.setData({
+            isHome: false,
+            // postList: postList
+          })
+          var urlPostList = app.globalData.url + '/api/content/categories/' + slugName + '/posts';
+          var token = app.globalData.token;
+          var params = {
+            page: 0,
+            size: 5,
+            sort: 'createTime,desc',
+          };
+          request.requestGetApi(urlPostList, token, params, this, this.successTreeView, this.failTreeView);
+        }
+      
+      
      
     },
   successTreeView: function (res, selfObj){
     console.log(res);
     var postList = this.data.postList;
-    postList.length = 0 ;
+    var pages = this.data.pages;
+    // postList.length = 0 ;
     if(res.data.content.length==0){
       this.setData({
-        moreFlag:true
+        moreFlag:true,
+        postList: postList,
+        pages: res.data.pages,
+        page:res.data.page
+      })
+      wx.showToast({
+        icon: 'none',
+        title: '已经没有拉！',
       })
     }else{
+      postList = postList.concat(res.data.content);
       this.setData({
-        moreFlag: false
+        moreFlag: false,
+        postList: postList,
+        pages: res.data.pages,
+        page: res.data.page
       })
     }
     this.setData({
-      postList:res.data.content
+      isLoading:false
     })
+    wx.hideLoading();
     },
   failTreeView: function (res, selfObj){
       console.log(res);
